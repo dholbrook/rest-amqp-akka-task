@@ -1,4 +1,4 @@
-# rest-amqp-akka-todo
+# rest-amqp-akka-task
 
 This is a demonstrator project with the goal of showing how to provide both REST and AMQP interfaces 
 to the same microservice.
