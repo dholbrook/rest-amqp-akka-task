@@ -20,8 +20,8 @@ scalacOptions ++= Seq(
 resolvers += "The New Motion Public Repo" at "http://nexus.thenewmotion.com/content/groups/public/"
 
 libraryDependencies ++= {
-  val akkaVersion               = "2.3.9"
-  val akkaStreamVersion         = "1.0-M5"
+  val akkaVersion               = "2.3.10"
+  val akkaStreamVersion         = "1.0-RC1"
   val scalaTestVersion          = "2.2.1"
   val akkaAmqpClientVersion     = "1.4"
   val logbackClassicVersion     = "1.1.2"
@@ -30,21 +30,21 @@ libraryDependencies ++= {
   val h2Version                 = "1.4.187"
   val flywayVersion             = "3.2.1"
   Seq(
-    "com.typesafe.akka"     %% "akka-actor"                        % akkaVersion,
-    "com.typesafe.akka"     %% "akka-stream-experimental"          % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-core-experimental"       % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-experimental"            % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-spray-json-experimental" % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-testkit-experimental"    % akkaStreamVersion,
-    "com.github.sstone"     %% "amqp-client"                       % akkaAmqpClientVersion,
-    "ch.qos.logback"        %  "logback-classic"                   % logbackClassicVersion,
-    "org.scalikejdbc"       %% "scalikejdbc"                       % scalaikejdbcVersion,
-    "org.scalikejdbc"       %% "scalikejdbc-config"                % scalaikejdbcVersion,
-    "mysql"                 %  "mysql-connector-java"              % mysqlConnectorJavaVersion,
-    "org.scalatest"         %% "scalatest"                         % scalaTestVersion            % "test",
-    "org.scalikejdbc"       %% "scalikejdbc-test"                  % scalaikejdbcVersion         % "test",
-    "com.h2database"        %  "h2"                                % h2Version                   % "test",
-    "org.flywaydb"          %  "flyway-core"                       % flywayVersion               % "test"
+    "com.typesafe.akka"     %% "akka-actor"                              % akkaVersion,
+    "com.typesafe.akka"     %% "akka-stream-experimental"                % akkaStreamVersion,
+    "com.typesafe.akka"     %% "akka-http-core-experimental"             % akkaStreamVersion,
+    "com.typesafe.akka"     %% "akka-http-scala-experimental"            % akkaStreamVersion,
+    "com.typesafe.akka"     %% "akka-http-spray-json-experimental"       % akkaStreamVersion,
+    "com.typesafe.akka"     %% "akka-http-testkit-scala-experimental"    % akkaStreamVersion,
+    "com.github.sstone"     %% "amqp-client"                             % akkaAmqpClientVersion,
+    "ch.qos.logback"        %  "logback-classic"                         % logbackClassicVersion,
+    "org.scalikejdbc"       %% "scalikejdbc"                             % scalaikejdbcVersion,
+    "org.scalikejdbc"       %% "scalikejdbc-config"                      % scalaikejdbcVersion,
+    "mysql"                 %  "mysql-connector-java"                    % mysqlConnectorJavaVersion,
+    "org.scalatest"         %% "scalatest"                               % scalaTestVersion            % "test",
+    "org.scalikejdbc"       %% "scalikejdbc-test"                        % scalaikejdbcVersion         % "test",
+    "com.h2database"        %  "h2"                                      % h2Version                   % "test",
+    "org.flywaydb"          %  "flyway-core"                             % flywayVersion               % "test"
   )
 }
 

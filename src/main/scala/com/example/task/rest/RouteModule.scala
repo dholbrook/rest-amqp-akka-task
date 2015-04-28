@@ -1,7 +1,7 @@
 package com.example.task.rest
 
-import akka.http.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.server.Directives._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
 import akka.util.Timeout
 import com.example.task.actors.TaskActor._

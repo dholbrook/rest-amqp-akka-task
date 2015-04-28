@@ -1,6 +1,6 @@
 package com.example.task
 
-import akka.http.Http
+import akka.http.scaladsl.Http
 import com.example.task.actors.{TaskActorModule, AkkaModule}
 import com.example.task.amqp.AmqpModule
 import com.example.task.rest.RouteModule
