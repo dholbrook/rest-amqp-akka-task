@@ -21,7 +21,7 @@ resolvers += "The New Motion Public Repo" at "http://nexus.thenewmotion.com/cont
 
 libraryDependencies ++= {
   val akkaVersion               = "2.3.10"
-  val akkaStreamVersion         = "1.0-RC1"
+  val akkaStreamVersion         = "1.0"
   val scalaTestVersion          = "2.2.1"
   val akkaAmqpClientVersion     = "1.4"
   val logbackClassicVersion     = "1.1.2"
@@ -33,9 +33,8 @@ libraryDependencies ++= {
     "com.typesafe.akka"     %% "akka-actor"                              % akkaVersion,
     "com.typesafe.akka"     %% "akka-stream-experimental"                % akkaStreamVersion,
     "com.typesafe.akka"     %% "akka-http-core-experimental"             % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-scala-experimental"            % akkaStreamVersion,
     "com.typesafe.akka"     %% "akka-http-spray-json-experimental"       % akkaStreamVersion,
-    "com.typesafe.akka"     %% "akka-http-testkit-scala-experimental"    % akkaStreamVersion,
+    "com.typesafe.akka"     %% "akka-http-testkit-experimental"          % akkaStreamVersion,
     "com.github.sstone"     %% "amqp-client"                             % akkaAmqpClientVersion,
     "ch.qos.logback"        %  "logback-classic"                         % logbackClassicVersion,
     "org.scalikejdbc"       %% "scalikejdbc"                             % scalaikejdbcVersion,
