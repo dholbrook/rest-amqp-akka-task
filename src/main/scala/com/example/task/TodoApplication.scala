@@ -1,18 +1,23 @@
 package com.example.task
 
+import java.util.concurrent.TimeUnit
+
 import akka.http.scaladsl.Http
 import com.example.task.actors.{AkkaModule, TaskActorModule}
 import com.example.task.amqp.AmqpModule
 import com.example.task.rest.RouteModule
 import scalikejdbc.config.{DBs, DBsWithEnv}
 
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
+
 object TodoApplication
   extends App
-          with ConfigModule
-          with AkkaModule
-          with TaskActorModule
-          with RouteModule
-          with AmqpModule {
+    with ConfigModule
+    with AkkaModule
+    with TaskActorModule
+    with RouteModule
+    with AmqpModule {
 
   val banner =
     """|
@@ -32,7 +37,7 @@ object TodoApplication
   Http().bindAndHandle(routes, config.getString("http.interface"), config.getInt("http.port"))
 
   sys.addShutdownHook {
-    actorSystem.shutdown()
+    actorSystem.terminate()
     DBs.closeAll()
     println("Application Stopped")
   }
