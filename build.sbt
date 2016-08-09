@@ -20,16 +20,16 @@ scalacOptions ++= Seq(
 resolvers += "The New Motion Public Repo" at "http://nexus.thenewmotion.com/content/groups/public/"
 
 libraryDependencies ++= {
-  val akkaVersion               = "2.4.4"
-  val akkaStreamVersion         = "2.4.4"
+  val akkaVersion               = "2.4.8"
+  val akkaStreamVersion         = "2.4.8"
   val scalaTestVersion          = "2.2.6"
   val akkaAmqpClientVersion     = "1.5"
   val logbackClassicVersion     = "1.1.7"
-  val scalaikejdbcVersion       = "2.3.5"
+  val scalaikejdbcVersion       = "2.4.2"
   val commonsDbcpVersion        = "1.4"
-  val mysqlConnectorJavaVersion = "5.1.38"
-  val h2Version                 = "1.4.191"
-  val flywayVersion             = "4.0"
+  val mysqlConnectorJavaVersion = "6.0.3"
+  val h2Version                 = "1.4.192"
+  val flywayVersion             = "4.0.3"
   Seq(
     "com.typesafe.akka"     %% "akka-actor"                              % akkaVersion,
     "com.typesafe.akka"     %% "akka-stream"                             % akkaStreamVersion,
