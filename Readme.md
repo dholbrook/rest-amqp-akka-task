@@ -3,16 +3,12 @@
 This is a demonstrator project with the goal of showing how to provide both REST and AMQP interfaces 
 to the same microservice.
 
-## boot2docker / docker-compose
+## Dependencies
 
 There is a `docker-compose.yml` file in the root of the project to provide the 
-required instances of MySQL and RabbitMq.  If you are running Windows or Mac 
-you will need [boot2docker](http://boot2docker.io/).  In addition to a working
-docker environment you will have to install 
-[docker-compose](https://docs.docker.com/compose/install/).
+required instances of MySQL and RabbitMq.  You will need [Docker](http://www.docker.com/products/overview).
+Tested with [Docker For Mac](http://www.docker.com/products/docker#/mac), which includes docker and docker-compose.
 
-    $ boot2docker up
-    $ eval "$(boot2docker shellinit)"
     $ docker-compose up -d
 
 ## run the database migrations
@@ -50,8 +46,13 @@ find one
 
 ### Amqp examples
 
-the python script in ./scripts/task_amqp_rpc.py uses pika you will need python 
-and [pika](https://pika.readthedocs.org/en/0.9.14/) installed.
+You will need to install [Python (Mac Instructions)](http://docs.python-guide.org/en/latest/starting/install/osx/)
+
+then install [pika](https://pika.readthedocs.org)
+
+    $ pip install pika
+
+the python script in ./scripts/task_amqp_rpc.py 
 
 create
 

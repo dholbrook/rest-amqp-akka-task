@@ -7,8 +7,7 @@ import sys
 class TaskAmqpClient(object):
     def __init__(self):
 
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
-            host='192.168.59.103'))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 
         self.channel = self.connection.channel()
 

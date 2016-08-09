@@ -37,7 +37,7 @@ trait AmqpModule extends TaskProtocol {
   def createConnectionFactory: ConnectionFactory = {
     val connFactory = new ConnectionFactory()
     //TODO: use config
-    connFactory.setUri("amqp://guest:guest@192.168.59.103/%2F")
+    connFactory.setUri("amqp://guest:guest@localhost/%2F")
     connFactory
   }
 

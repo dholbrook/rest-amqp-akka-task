@@ -1,20 +1,22 @@
-db:
-  image: mysql:5.6
-  hostname: db
-  domainname: example.com
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=localdevpwd
-    - MYSQL_DATABASE=task
-    - MYSQL_USER=task
-    - MYSQL_PASSWORD=taskpwd
-rabbit1:
-  image: rabbitmq:3.5.1-management
-  hostname: rabbit1
-  domainname: example.com
-  ports:
-    - "15672:15672"
-    - "5672:5672"
-  environment:
-    - RABBITMQ_NODENAME=rabbit1
+version: "2"
+services:
+  db:
+    image: mysql:5.6
+    hostname: db
+    domainname: example.com
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=localdevpwd
+      - MYSQL_DATABASE=task
+      - MYSQL_USER=task
+      - MYSQL_PASSWORD=taskpwd
+  rabbit1:
+    image: rabbitmq:3.5.1-management
+    hostname: rabbit1
+    domainname: example.com
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_NODENAME=rabbit1

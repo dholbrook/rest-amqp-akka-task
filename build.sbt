@@ -51,7 +51,7 @@ libraryDependencies ++= {
 
 //flyway migrations
 seq(flywaySettings: _*)
-flywayUrl := "jdbc:mysql://192.168.59.103/task"
+flywayUrl := "jdbc:mysql://localhost/task"
 flywayUser := "task"
 flywayPassword := "taskpwd"
 
