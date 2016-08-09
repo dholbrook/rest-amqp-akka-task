@@ -33,9 +33,10 @@ object TodoApplication
 
   DBsWithEnv("production").setupAll()
 
+  val httpConfig = HttpConfig(config)
   Http().bindAndHandle(handler = routes,
-                       interface = config.getString("http.interface"),
-                       port = config.getInt("http.port"))
+                       interface = httpConfig.interface,
+                       port = httpConfig.port)
 
   sys.addShutdownHook {
     actorSystem.terminate()
