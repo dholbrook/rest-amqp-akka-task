@@ -12,15 +12,14 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object TodoApplication
-  extends App
+    extends App
     with ConfigModule
     with AkkaModule
     with TaskActorModule
     with RouteModule
     with AmqpModule {
 
-  val banner =
-    """|
+  val banner = """|
       |  ______           __      __    _      __
       | /_  __/___ ______/ /__   / /   (_)____/ /_
       |  / / / __ `/ ___/ //_/  / /   / / ___/ __/
@@ -34,7 +33,9 @@ object TodoApplication
 
   DBsWithEnv("production").setupAll()
 
-  Http().bindAndHandle(routes, config.getString("http.interface"), config.getInt("http.port"))
+  Http().bindAndHandle(handler = routes,
+                       interface = config.getString("http.interface"),
+                       port = config.getInt("http.port"))
 
   sys.addShutdownHook {
     actorSystem.terminate()

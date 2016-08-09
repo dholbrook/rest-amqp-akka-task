@@ -6,8 +6,8 @@ trait TaskActorComponent {
   def taskActorRef: ActorRef
 }
 
-trait TaskActorModule extends TaskActorComponent {
-  self: AkkaComponent =>
+trait TaskActorModule extends TaskActorComponent { self: AkkaComponent =>
 
-  override lazy val taskActorRef = actorSystem.actorOf(Props(classOf[TaskActor]), "task")
+  override lazy val taskActorRef =
+    actorSystem.actorOf(Props(classOf[TaskActor]), "task")
 }

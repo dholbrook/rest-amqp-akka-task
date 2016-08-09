@@ -14,11 +14,12 @@ trait AkkaComponent {
   implicit def flowMaterializer: ActorMaterializer
 }
 
-trait AkkaModule extends AkkaComponent {
-  self: ConfigComponent =>
+trait AkkaModule extends AkkaComponent { self: ConfigComponent =>
 
-  override implicit lazy val actorSystem: ActorSystem = ActorSystem("todo-actor-system", config)
-  override implicit lazy val executor: ExecutionContextExecutor = actorSystem.dispatcher
-  override implicit lazy val flowMaterializer: ActorMaterializer = ActorMaterializer()
+  override implicit lazy val actorSystem: ActorSystem =
+    ActorSystem("todo-actor-system", config)
+  override implicit lazy val executor: ExecutionContextExecutor =
+    actorSystem.dispatcher
+  override implicit lazy val flowMaterializer: ActorMaterializer =
+    ActorMaterializer()
 }
-

@@ -18,7 +18,8 @@ object TaskActor {
 
   case class CreateTask(description: String) extends TaskCommand
 
-  case class SaveTask(id: Long, description: String, complete: Boolean) extends TaskCommand
+  case class SaveTask(id: Long, description: String, complete: Boolean)
+      extends TaskCommand
 
   sealed trait TaskQuery
 

@@ -10,3 +10,7 @@ libraryDependencies ++= {
 addSbtPlugin("org.flywaydb" % "flyway-sbt" % "3.2.1")
 
 addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "2.2.6")
+
+addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.11")
+
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.1.10")
