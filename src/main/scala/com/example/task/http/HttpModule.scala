@@ -1,4 +1,4 @@
-package com.example.task.rest
+package com.example.task.http
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.http.scaladsl.Http
@@ -7,7 +7,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import com.example.task.HttpConfig
 import com.example.task.domain.TaskActor._
 import com.example.task.domain.{TaskJsonProtocol, _}
 

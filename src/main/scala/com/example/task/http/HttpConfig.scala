@@ -1,4 +1,4 @@
-package com.example.task
+package com.example.task.http
 
 import com.typesafe.config.{Config, ConfigFactory}
 

@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.example.task.amqp.AmqpModule
 import com.example.task.domain.TaskActor
-import com.example.task.rest.HttpModule
+import com.example.task.http.{HttpConfig, HttpModule}
 import com.typesafe.config.{Config, ConfigFactory}
 import scalikejdbc.config.DBsWithEnv
 
