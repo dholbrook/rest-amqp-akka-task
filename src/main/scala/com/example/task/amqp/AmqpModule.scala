@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
-class AmqpModule(taskActorRef: ActorRef)(implicit val actorSystem: ActorSystem,
+class AmqpModule(taskActorRef: ActorRef, amqpConfig: AmqpConfig)(implicit val actorSystem: ActorSystem,
                                          implicit val executionContext: ExecutionContext)
     extends TaskJsonProtocol {
 
@@ -38,8 +38,10 @@ class AmqpModule(taskActorRef: ActorRef)(implicit val actorSystem: ActorSystem,
 
   def createConnectionFactory: ConnectionFactory = {
     val connFactory = new ConnectionFactory()
-    //TODO: use config
-    connFactory.setUri("amqp://guest:guest@localhost/%2F")
+    connFactory.setHost(amqpConfig.host)
+    connFactory.setPort(amqpConfig.port)
+    connFactory.setUsername(amqpConfig.username)
+    connFactory.setPassword(amqpConfig.password)
     connFactory
   }
 

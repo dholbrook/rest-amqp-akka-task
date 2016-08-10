@@ -2,7 +2,7 @@ package com.example.task
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import com.example.task.amqp.AmqpModule
+import com.example.task.amqp.{AmqpConfig, AmqpModule}
 import com.example.task.domain.TaskActor
 import com.example.task.http.{HttpConfig, HttpModule}
 import com.typesafe.config.{Config, ConfigFactory}
@@ -29,6 +29,7 @@ object TaskListApplication {
     //Configuration
     val config: Config = ConfigFactory.load()
     val httpConfig     = HttpConfig(config)
+    val amqpConfig = AmqpConfig(config)
 
     //Akka Actor System
     implicit val actorSystem                                = ActorSystem("task-list-actor-system", config)
@@ -45,6 +46,6 @@ object TaskListApplication {
     val routeModule = new HttpModule(taskActorRef, httpConfig)
 
     //Amqp Interface
-    val amqpModule = new AmqpModule(taskActorRef)
+    val amqpModule = new AmqpModule(taskActorRef, amqpConfig)
   }
 }
