@@ -1,16 +1,14 @@
 package com.example.task
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.example.task.amqp.AmqpModule
 import com.example.task.domain.TaskActor
-import com.example.task.rest.RouteModule
+import com.example.task.rest.HttpModule
 import com.typesafe.config.{Config, ConfigFactory}
 import scalikejdbc.config.DBsWithEnv
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.util.{Failure, Success}
 
 object TaskListApplication {
 
@@ -34,7 +32,7 @@ object TaskListApplication {
 
     //Akka Actor System
     implicit val actorSystem                                = ActorSystem("task-list-actor-system", config)
-    implicit val materializer                               = ActorMaterializer()
+    implicit val materializer: ActorMaterializer            = ActorMaterializer()
     implicit val executionContext: ExecutionContextExecutor = actorSystem.dispatcher
 
     //Database initialization
@@ -44,19 +42,7 @@ object TaskListApplication {
     val taskActorRef = actorSystem.actorOf(TaskActor.props(), "task")
 
     //Http Interface
-    val routeModule = new RouteModule(taskActorRef)
-    val httpBindingFuture = Http().bindAndHandle(
-        handler = routeModule.routes,
-        interface = httpConfig.interface,
-        port = httpConfig.port
-    )
-    httpBindingFuture.onComplete {
-      case Success(binding) ⇒
-        actorSystem.log.info(s"Server bound to ${httpConfig.interface}:${httpConfig.port}")
-      case Failure(e) ⇒
-        actorSystem.log.error(s"Binding failed with ${e.getMessage}", e)
-        actorSystem.terminate()
-    }
+    val routeModule = new HttpModule(taskActorRef, httpConfig)
 
     //Amqp Interface
     val amqpModule = new AmqpModule(taskActorRef)
