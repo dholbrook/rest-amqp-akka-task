@@ -1,29 +1,27 @@
 package com.example.task.amqp
 
-import akka.actor.ActorRef
+import akka.actor.{ActorRef, ActorSystem}
 import akka.pattern.ask
 import akka.util.Timeout
+import com.example.task.domain.TaskActor._
+import com.example.task.domain._
 import com.github.sstone.amqp.Amqp._
 import com.github.sstone.amqp.RpcServer._
 import com.github.sstone.amqp._
-import com.example.task.ConfigComponent
-import com.example.task.actors.TaskActor.{CreateTask, FindAllTasks, FindOneTask, SaveTask}
-import com.example.task.actors.{AkkaComponent, TaskActorComponent, TaskProtocol}
-import com.example.task.models._
 import com.rabbitmq.client.ConnectionFactory
 import spray.json._
 
-import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
-trait AmqpModule extends TaskProtocol {
-  self: AkkaComponent with TaskActorComponent with ConfigComponent =>
+class AmqpModule(taskActorRef: ActorRef)(implicit val actorSystem: ActorSystem,
+                                         implicit val executionContext: ExecutionContext)
+    extends TaskJsonProtocol {
 
   val connectionFactory = createConnectionFactory
-  val connectionOwner = actorSystem.actorOf(
-      ConnectionOwner.props(connectionFactory, 1.second),
-      "amqp-connection-owner")
+  val connectionOwnerRef =
+    actorSystem.actorOf(ConnectionOwner.props(connectionFactory, 1.second), "amqp-connection-owner")
   private implicit val timeout = Timeout(3.seconds)
 
   private implicit def stringToBytes(s: String): Array[Byte] =
@@ -34,12 +32,8 @@ trait AmqpModule extends TaskProtocol {
                       processor: IProcessor,
                       name: String): ActorRef =
     ConnectionOwner.createChildActor(
-        connectionOwner,
-        RpcServer.props(queueParams,
-                        StandardExchanges.amqDirect,
-                        routingKey,
-                        processor,
-                        ChannelParameters(qos = 1)),
+        connectionOwnerRef,
+        RpcServer.props(queueParams, StandardExchanges.amqDirect, routingKey, processor, ChannelParameters(qos = 1)),
         Some(name))
 
   def createConnectionFactory: ConnectionFactory = {
@@ -75,9 +69,7 @@ trait AmqpModule extends TaskProtocol {
 
   val findAllTaskProcessor = new IProcessor {
     override def process(delivery: Delivery): Future[ProcessResult] = {
-      (taskActorRef ? FindAllTasks)
-        .mapTo[List[Task]]
-        .map(task => ProcessResult(Some(task.toJson.toString())))
+      (taskActorRef ? FindAllTasks).mapTo[List[Task]].map(task => ProcessResult(Some(task.toJson.toString())))
     }
 
     override def onFailure(delivery: Delivery, e: Throwable) =
@@ -89,50 +81,71 @@ trait AmqpModule extends TaskProtocol {
       Future(JsonParser(delivery.body).convertTo[FindOneTask])
         .flatMap(findOneTask => taskActorRef ? findOneTask)
         .mapTo[Some[Task]]
-        .map((task: Some[Task]) =>
-              ProcessResult(task.map(t => t.toJson.toString())))
+        .map((task: Some[Task]) => ProcessResult(task.map(t => t.toJson.toString())))
     }
 
     override def onFailure(delivery: Delivery, e: Throwable) =
       ProcessResult(Some("server error: " + e.getMessage))
   }
 
-  val createTaskParams: QueueParameters = QueueParameters("task.create.Q",
-                                                          passive = false,
-                                                          durable = false,
-                                                          exclusive = false,
-                                                          autodelete = true)
-  val saveTaskParams: QueueParameters = QueueParameters("task.save.Q",
-                                                        passive = false,
-                                                        durable = false,
-                                                        exclusive = false,
-                                                        autodelete = true)
-  val findAllTaskParams: QueueParameters = QueueParameters("task.find.all.Q",
-                                                           passive = false,
-                                                           durable = false,
-                                                           exclusive = false,
-                                                           autodelete = true)
-  val findOneTaskParams: QueueParameters = QueueParameters("task.find.one.Q",
-                                                           passive = false,
-                                                           durable = false,
-                                                           exclusive = false,
-                                                           autodelete = true)
+  val createTaskParams = QueueParameters(
+      name = "task.create.Q",
+      passive = false,
+      durable = false,
+      exclusive = false,
+      autodelete = true
+  )
 
-  val createTaskRpcServer: ActorRef = createRpcServer(createTaskParams,
-                                                      "task.create",
-                                                      createTaskProcessor,
-                                                      "task-create")
-  val saveTaskRpcServer: ActorRef = createRpcServer(saveTaskParams,
-                                                    "task.save",
-                                                    saveTaskProcessor,
-                                                    "task-save")
-  val findAllTaskRpcServer: ActorRef = createRpcServer(findAllTaskParams,
-                                                       "task.find.all",
-                                                       findAllTaskProcessor,
-                                                       "task-find-all")
-  val findOneTaskRpcServer: ActorRef = createRpcServer(findOneTaskParams,
-                                                       "task.find.one",
-                                                       findOneTaskProcessor,
-                                                       "task-find-one")
+  val saveTaskParams = QueueParameters(
+      name = "task.save.Q",
+      passive = false,
+      durable = false,
+      exclusive = false,
+      autodelete = true
+  )
+
+  val findAllTaskParams = QueueParameters(
+      name = "task.find.all.Q",
+      passive = false,
+      durable = false,
+      exclusive = false,
+      autodelete = true
+  )
+
+  val findOneTaskParams = QueueParameters(
+      name = "task.find.one.Q",
+      passive = false,
+      durable = false,
+      exclusive = false,
+      autodelete = true
+  )
+
+  val createTaskRpcServer = createRpcServer(
+      queueParams = createTaskParams,
+      routingKey = "task.create",
+      processor = createTaskProcessor,
+      name = "task-create"
+  )
+
+  val saveTaskRpcServer = createRpcServer(
+      queueParams = saveTaskParams,
+      routingKey = "task.save",
+      processor = saveTaskProcessor,
+      name = "task-save"
+  )
+
+  val findAllTaskRpcServer = createRpcServer(
+      queueParams = findAllTaskParams,
+      routingKey = "task.find.all",
+      processor = findAllTaskProcessor,
+      name = "task-find-all"
+  )
+
+  val findOneTaskRpcServer = createRpcServer(
+      queueParams = findOneTaskParams,
+      routingKey = "task.find.one",
+      processor = findOneTaskProcessor,
+      name = "task-find-one"
+  )
 
 }

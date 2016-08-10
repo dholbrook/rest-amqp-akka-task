@@ -57,3 +57,6 @@ flywayPassword := "taskpwd"
 
 //reverse engineering support
 scalikejdbcSettings
+
+//code formatting
+scalafmtConfig := Some (file(".scalafmt"))

@@ -1,4 +1,4 @@
-package com.example.task.models
+package com.example.task.domain
 
 import scalikejdbc._
 
@@ -42,36 +42,28 @@ object Task extends SQLSyntaxSupport[Task] {
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(Task as t))
-      .map(rs => rs.long(1))
-      .single()
-      .apply()
-      .get
+    withSQL(select(sqls.count).from(Task as t)).map(rs => rs.long(1)).single().apply().get
   }
 
-  def findBy(where: SQLSyntax)(
-      implicit session: DBSession = autoSession): Option[Task] = {
+  def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[Task] = {
     withSQL {
       select.from(Task as t).where.append(where)
     }.map(Task(t.resultName)).single().apply()
   }
 
-  def findAllBy(where: SQLSyntax)(
-      implicit session: DBSession = autoSession): List[Task] = {
+  def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[Task] = {
     withSQL {
       select.from(Task as t).where.append(where)
     }.map(Task(t.resultName)).list().apply()
   }
 
-  def countBy(where: SQLSyntax)(
-      implicit session: DBSession = autoSession): Long = {
+  def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
     withSQL {
       select(sqls.count).from(Task as t).where.append(where)
     }.map(_.long(1)).single().apply().get
   }
 
-  def create(description: String, complete: Boolean)(
-      implicit session: DBSession = autoSession): Task = {
+  def create(description: String, complete: Boolean)(implicit session: DBSession = autoSession): Task = {
     val generatedKey = withSQL {
       insert
         .into(Task)
@@ -92,9 +84,9 @@ object Task extends SQLSyntaxSupport[Task] {
     withSQL {
       update(Task)
         .set(
-            column.id -> entity.id,
+            column.id          -> entity.id,
             column.description -> entity.description,
-            column.complete -> entity.complete
+            column.complete    -> entity.complete
         )
         .where
         .eq(column.id, entity.id)

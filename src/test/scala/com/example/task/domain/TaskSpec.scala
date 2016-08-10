@@ -1,4 +1,4 @@
-package com.example.task.models
+package com.example.task.domain
 
 import org.flywaydb.core.Flyway
 import org.scalatest._

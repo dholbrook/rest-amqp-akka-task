@@ -1,14 +1,13 @@
-package com.example.task.actors
+package com.example.task.domain
 
 import akka.actor._
-import com.example.task.actors.TaskActor._
-import com.example.task.models.Task
+import com.example.task.domain.TaskActor._
 import spray.json.DefaultJsonProtocol
 
-trait TaskProtocol extends DefaultJsonProtocol {
-  implicit val taskFormat = jsonFormat3(Task.apply)
-  implicit val newTaskFormat = jsonFormat1(CreateTask.apply)
-  implicit val updateTaskFormat = jsonFormat3(SaveTask.apply)
+trait TaskJsonProtocol extends DefaultJsonProtocol {
+  implicit val taskFormat        = jsonFormat3(Task.apply)
+  implicit val newTaskFormat     = jsonFormat1(CreateTask.apply)
+  implicit val updateTaskFormat  = jsonFormat3(SaveTask.apply)
   implicit val findOneTaskFormat = jsonFormat1(FindOneTask.apply)
 }
 
@@ -18,8 +17,7 @@ object TaskActor {
 
   case class CreateTask(description: String) extends TaskCommand
 
-  case class SaveTask(id: Long, description: String, complete: Boolean)
-      extends TaskCommand
+  case class SaveTask(id: Long, description: String, complete: Boolean) extends TaskCommand
 
   sealed trait TaskQuery
 
@@ -27,10 +25,11 @@ object TaskActor {
 
   case object FindAllTasks extends TaskQuery
 
+  def props(): Props = Props(classOf[TaskActor])
+
 }
 
 class TaskActor extends Actor with ActorLogging {
-
   def receive = {
     case FindAllTasks =>
       log.debug("FindAllTasks called")

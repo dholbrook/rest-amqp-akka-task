@@ -1,17 +1,16 @@
 package com.example.task.rest
 
+import akka.actor.ActorRef
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
 import akka.util.Timeout
-import com.example.task.actors.TaskActor._
-import com.example.task.actors.{AkkaComponent, TaskActorComponent, TaskProtocol}
-import com.example.task.models._
+import com.example.task.domain.TaskActor._
+import com.example.task.domain.{TaskJsonProtocol, _}
 
 import scala.concurrent.duration._
 
-trait RouteModule extends TaskProtocol {
-  self: AkkaComponent with TaskActorComponent =>
+class RouteModule(taskActorRef: ActorRef) extends TaskJsonProtocol {
 
   private implicit val timeout = Timeout(3.seconds)
 
